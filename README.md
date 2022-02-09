@@ -1,2 +1,8 @@
-# fhir-dataframes
-Make Pandas DataFrames capable of handling FHIR resources and use concepts and codes conveniently.
+# FHIR DataFrames (Coming soon)
+DataFrames are the bread and butter of every datascientists. This packages makes analysing FHIR resources as easy as manipulating Pandas DataFrames.
+
+## Highlights
+⭐ Convenient way to FHIR resources with deeply nested structures to a flat Pandas DataFrame.
+⭐ Easy pythonic way to handle CodeableConcepts, Codings and ValueSets (FHIR Terminology)
+
+Stay tuned and [watch this repo](https://github.com/user/repository/subscription)
