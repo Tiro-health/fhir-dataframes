@@ -1,4 +1,4 @@
-# FHIR DataFrames (Coming soon)
+# FHIR DataFrames (coming soon)
 DataFrames are the bread and butter of every datascientist. This packages makes analysing FHIR resources as easy as manipulating Pandas DataFrames.
 
 ## ⭐ Highlights ⭐
