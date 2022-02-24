@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+tiro-fhir = {editable = true, path = "/Users/axelvanraes/dev/tiro-fhir"}
+pandas = "*"
+pydantic = "*"
+requests = "*"
+streamlit = "*"
+
+[dev-packages]
+mypy = "*"
+ipykernel = "*"
+
+[requires]
+python_version = "3.8"
