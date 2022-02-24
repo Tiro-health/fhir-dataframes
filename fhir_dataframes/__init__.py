@@ -1,1 +1,2 @@
 from fhir_dataframes import extension_dtype
+from fhir_dataframes import code_accessor
