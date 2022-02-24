@@ -5,7 +5,7 @@ DataFrames are the bread and butter of every datascientist. This packages makes 
 
 - Convenient way to map FHIR resources with deeply nested structures to a flat Pandas DataFrame.
 ```python
-df = FHIRStore["Observation"]["code", "value", "subject.reference"]
+df = FHIRStore["Procedure"]["code", "value", "subject.reference"]
 ```
 - Easy pythonic way to handle CodeableConcepts, Codings and ValueSets (FHIR Terminology)
 
