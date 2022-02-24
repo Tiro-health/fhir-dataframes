@@ -107,12 +107,6 @@ class CodeableConceptArray(pd.api.extensions.ExtensionDtype):
         """A 1-D array indicating if each value is missing."""
         return np.array([x is None for x in self._data], dtype=bool)
 
-    def unique(self):
-        flattened = []
-        for x in self._data:
-            flattened.extend(x)
-        return np.array(flattened)
-
     def __arrow_array__(self, type=None):
         # convert the underlying array values to a pyarrow Array
         import pyarrow

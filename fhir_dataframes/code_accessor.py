@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from tiro_fhir import ValueSet
 
@@ -9,3 +10,9 @@ class CodeOperations:
 
     def isin(self, vs: ValueSet):
         return self._obj.apply(lambda c: c in vs).astype("bool")
+
+    def unique(self):
+        flattened = []
+        for i, x in self._obj.iteritems():
+            flattened.extend(x.coding)
+        return np.array(flattened)

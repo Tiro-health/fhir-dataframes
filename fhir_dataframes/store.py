@@ -3,7 +3,7 @@ from itertools import tee
 from typing import Iterable, Optional, Sequence, Union
 import pandas as pd
 from tiro_fhir import Resource
-from fhir_dataframes import valueset
+from fhir_dataframes import code_accessor
 
 
 class LocalFHIRStore:
