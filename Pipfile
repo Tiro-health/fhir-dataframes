@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tiro-fhir = {editable = true, path = "/Users/axelvanraes/dev/tiro-fhir"}
+fhirkit == "==0.0.16"
 pandas = "*"
 pydantic = "*"
 requests = "*"
@@ -13,6 +13,7 @@ streamlit = "*"
 [dev-packages]
 mypy = "*"
 ipykernel = "*"
+pytest-check = "*"
 
 [requires]
 python_version = "3.8"
