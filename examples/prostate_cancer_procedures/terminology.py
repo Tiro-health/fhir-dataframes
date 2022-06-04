@@ -1,4 +1,4 @@
-from tiro_fhir import SCTCoding, Coding, CodeableConcept, SimpleValueSet
+from fhirkit import SCTCoding, Coding, CodeableConcept, SimpleValueSet
 
 TIRO_CS = "https://tiro.health/fhir/sid"
 PROSTATECTOMIE = SCTCoding("90470006 |Prostatectomy (procedure)|")

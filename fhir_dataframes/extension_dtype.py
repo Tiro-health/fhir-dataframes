@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, Dict, Type, cast
 import numpy as np
-from tiro_fhir import CodeableConcept
+from fhirkit import CodeableConcept
 import pandas as pd
 from pandas._typing import DtypeObj
 from pandas.core.dtypes.dtypes import PandasExtensionDtype, Ordered, Dtype

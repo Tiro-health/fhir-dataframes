@@ -1,10 +1,10 @@
-from tiro_fhir import Procedure, Reference, SimpleValueSet
+from fhirkit import Procedure, Reference, SimpleValueSet
 from datetime import datetime
 import streamlit as st
 import pandas as pd
 
 from fhir_dataframes.store import LocalFHIRStore
-from fhir_dataframes import extension_dtype
+import fhir_dataframes
 from examples.prostate_cancer_procedures.terminology import ALL_PROCEDURES, FILTERS
 
 procedure_list = [
@@ -52,7 +52,7 @@ procedure_list = [
 
 store = LocalFHIRStore(procedure_list)
 
-df = store.Procedure.to_pandas()
+df = store.get_by_resource_type("Procedure").to_pandas()
 df["code"] = df["code"].astype("CodeableConcept")
 df["subject"] = df["subject"].apply(lambda x: x.id)
 st.set_page_config(layout="wide")
@@ -138,12 +138,14 @@ if "number_of_filters" not in st.session_state:
 resulting_codes = []
 for i in range(st.session_state["number_of_filters"]):
     resulting_codes = st.multiselect(
-        f"Filter on codes: ", all_codes, format_func=str, key="filter_" + str(i)
+        f"Filter on codes: ",
+        all_codes,
+        format_func=lambda x: str(x),
+        key="filter_" + str(i),
     )
 
 
 vs = SimpleValueSet(*resulting_codes)
 st.dataframe(df[df["code"].code.isin(vs)])
 
-st.dataframe(df, width=1000)
 st.write("Unieke patienten na filteren: ", df["subject"].unique().tolist())

@@ -1,9 +1,8 @@
 from __future__ import annotations
 from itertools import tee
-from typing import Iterable, Optional, Sequence, Union
+from typing import Any, Dict, Iterable, Optional, Sequence, Union
 import pandas as pd
-from tiro_fhir import Resource
-from fhir_dataframes import code_accessor
+from fhirkit import Resource
 
 
 class LocalFHIRStore:
@@ -16,10 +15,17 @@ class LocalFHIRStore:
         return result
 
     def to_pandas(self, keys: Optional[Sequence[str]] = None):
-        records = [resource.record(keys) for resource in self.resources]
-        return pd.DataFrame(records)
+        records = [resource.to_record(keys) for resource in self.resources]
+        df = pd.DataFrame.from_dict(records)
+        df.columns = [".".join(map(str, c)) for c in df.columns.tolist()]
+        return df
 
-    def __getitem__(self, key: Union[str, Sequence[str]]):
+    def __call__(self, *args, **kwds: Dict[str, Any]) -> LocalFHIRStore:
+        if "resourceType" in kwds:
+            return self.get_by_resource_type(kwds["resourceType"])
+        return self
+
+    def __getitem__(self, key: Optional[Union[str, Sequence[str]]]):
         if isinstance(key, str):
             return self.to_pandas([key])
         else:
@@ -32,15 +38,3 @@ class LocalFHIRStore:
 
     def _repr_html_(self) -> str:
         return pd.Series(self.resources).to_frame(name="resource")._repr_html_()
-
-    @property
-    def Observation(self):
-        return self.get_by_resource_type("Observation")
-
-    @property
-    def Procedure(self):
-        return self.get_by_resource_type("Procedure")
-
-    @property
-    def Condition(self):
-        return self.get_by_resource_type("Condition")

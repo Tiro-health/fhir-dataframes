@@ -8,6 +8,7 @@ EventSequence = Tuple[Record, ...]
 def filter_sequences(
     events: Iterable[Record],
     event_match_funcs: Sequence[Callable[[Record], bool]],
+    by: Optional[str] = None,
     include_incomplete=False,
 ):
     """Filter sequences of events (records) based on a set of boolean test criteria. The resulting sequences contain events that match the test criteria in order.
@@ -47,18 +48,39 @@ def filter_sequences(
     seq_length = len(event_match_funcs)
     seq_matches: List[Tuple[Record, ...]] = list()
 
-    # we'll use a dict as a state machine to build the sequences
-    states: Dict[int, Optional[EventSequence]] = {
-        i: None for i in range(seq_length)
-    }
-    # the -1 state is the start of an empty candidate sequence (represented by an empty tuple)
-    states[-1] = tuple()
+    def initialize_state():
+        """Helper function to initialize a new state dict"""
+        # we'll use a dict as a state machine to build the sequences
+        init_state = { i: None for i in range(seq_length)}
+        # the -1 state is the start of an empty candidate sequence (represented by an empty tuple)
+        init_state[-1] = tuple()
+        return init_state
+
+    grouped_states: Dict[str, Dict[int, Optional[EventSequence]]] = {}
     
     event_match_iter = (tuple(f(event) for f in event_match_funcs) for event in events) 
 
-
     # iterate over all events
     for event_dict, event_matches in zip(events, event_match_iter):
+
+        # 1. GROUP MGMT: pick the right state dictionary based on given group key 'by'
+
+        # we need to split out events and resulting sequences based on the field given in 'by'
+        if by is not None:
+            assert by in event_dict, "{by} must be a key of the event dictionary: {event_dict}"
+            group = event_dict[by]
+        else:
+            group = None # if no groups where specified, use a default group = None
+
+        if group not in grouped_states:
+            grouped_states[group] = initialize_state()
+
+        states = grouped_states[group]
+
+
+        # 2. EVENT MATCHING + SEQUENCE BUILDING: 
+        # check wether an event matches a target event and add the event to the appropriate candidate sequences
+
         # check whether the current record matches the expected event
         for event_index, event_is_a_match in enumerate(event_matches):
 
@@ -84,11 +106,11 @@ def filter_sequences(
                     None if event_index > 0 else tuple()
                 )  # the state at -1 should always be ready
 
-    # gather the remaining sequences in the state machine
-    for state_index, seq in states.items():
-        if (include_incomplete or state_index == seq_length - 1) and seq:
-            seq_matches.append(seq)
+    # 3. CLEANUP gather the remaining sequences in the state machine
+    for states in grouped_states.values():
+        for event_index, seq in states.items():
+            sequence_is_complete = event_index == seq_length - 1
+            if seq is not None and (include_incomplete or sequence_is_complete):
+                seq_matches.append(seq)
+                
     return seq_matches
-
-
-

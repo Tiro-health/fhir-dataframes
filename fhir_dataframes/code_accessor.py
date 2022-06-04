@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from tiro_fhir import ValueSet
+from fhirkit import ValueSet
 
 
 @pd.api.extensions.register_series_accessor("code")
