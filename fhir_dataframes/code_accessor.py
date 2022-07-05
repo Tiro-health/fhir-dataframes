@@ -15,4 +15,4 @@ class CodeOperations:
         flattened = []
         for i, x in self._obj.iteritems():
             flattened.extend(x.coding)
-        return np.array(flattened)
+        return pd.Series(np.array(flattened))
